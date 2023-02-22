@@ -2,11 +2,8 @@
 1)
 
 DFS Pre-order: 10, 3, 1, 7, 12, 13, 15
-
 DFS In-order: 1, 3, 7, 10, 12, 13, 15
-
 DFS Post-order: 1, 7, 3, 15, 13, 12, 10
-
 BFS: 10, 3, 12, 1, 7, 13, 15
 
 2)
@@ -19,8 +16,8 @@ public void mirror()
 private void mirror(BTNode<E> localRoot) 
 {
         if (localRoot == null) return;
-        mirror(myRoot.left);
-        mirror(myRoot.right);
+        mirror(localRoot.left);
+        mirror(localRoot.right);
         BTNode<E> temp = localRoot.right;
         localRoot.right = localRoot.left;
         localRoot.left = temp;
@@ -47,8 +44,8 @@ public static int sameAncestor(Tree t, int x, int y)
         return 0;
     }
     boolean here = (t.value() == x) || (t.value() == y);
-    int a = commonAncestor(t.leftChild(), x, y);
-    int b = commonAncestor(t.rightChild(), x, y);
+    int a = sameAncestor(t.leftChild(), x, y);
+    int b = sameAncestor(t.rightChild(), x, y);
     if ((a == -1 && b == -1) || ((a == -1 || b == -1) && here)) 
     {
     //The current node is the common ancestor if
@@ -57,7 +54,8 @@ public static int sameAncestor(Tree t, int x, int y)
     // down the tree
         return t.value();
     } 
-    else if (here) 
+    // if one of our children or us is a find, we pass it up.
+    else if (here || a == -1 || b == -1)
     {
 
         // We "flag" this node by sending -1 up the recursive calls
@@ -65,8 +63,8 @@ public static int sameAncestor(Tree t, int x, int y)
     } else 
     {
         // If the node is not the common ancestor nor contains x/y as a label,
-        // we can just pass up values from recursive calls as are
-        return a + b;
+        // we can just ignore it and all his children
+        return 0;
     }
 }
 ```
